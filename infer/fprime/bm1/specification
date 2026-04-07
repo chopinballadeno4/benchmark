@@ -1,0 +1,25 @@
+tool:
+    infer
+
+command:
+    infer run
+        --biabduction
+        --bufferoverrun
+        --cost
+        --liveness
+        --loop-hoisting
+        --parameter-not-null-checked
+        --pulse
+        --quandary
+        --racerd
+        --siof
+        --self-in-block
+        --starvation
+        --keep-going
+        -- clang++ -c fw_assert.cpp
+
+expected result:
+    no issue.
+
+actual result:
+    issue. infer is not aware of FW_ASSERT.
