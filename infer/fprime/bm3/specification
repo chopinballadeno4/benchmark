@@ -1,0 +1,24 @@
+tool:
+    infer
+
+command:
+    infer run
+        --biabduction
+        --bufferoverrun
+        --cost
+        --liveness
+        --loop-hoisting
+        --parameter-not-null-checked
+        --pulse
+        --racerd
+        --siof
+        --self-in-block
+        --starvation
+        --keep-going
+        -- clang++ -c integer_overflow.cpp
+
+expected result:
+    no issue.
+
+actual result:
+    issue. If statement return not recognized
