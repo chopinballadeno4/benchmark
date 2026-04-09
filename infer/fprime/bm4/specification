@@ -21,4 +21,4 @@ expected result:
     no issue.
 
 actual result:
-    issue. If statement return not recognized
+    issue. Infer overestimates the return value of a loop-based length function, leading to a false buffer overrun.
