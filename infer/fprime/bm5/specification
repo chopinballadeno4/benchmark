@@ -1,0 +1,24 @@
+tool:
+    infer
+
+command:
+    infer run
+        --biabduction
+        --bufferoverrun
+        --cost
+        --liveness
+        --loop-hoisting
+        --parameter-not-null-checked
+        --pulse
+        --racerd
+        --siof
+        --self-in-block
+        --starvation
+        --keep-going
+        -- clang++ -c minimal_overflow_check.cpp
+
+expected result:
+    no issue.
+
+actual result:
+    issue. Infer cannot correlate that entryFound == true implies entry < TABLE_SIZE across the loop boundary.
