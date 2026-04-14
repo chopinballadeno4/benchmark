@@ -1,0 +1,23 @@
+tool:
+    infer
+
+command:
+    infer run
+        --biabduction
+        --bufferoverrun
+        --cost
+        --liveness
+        --loop-hoisting
+        --parameter-not-null-checked
+        --pulse
+        --racerd
+        --siof
+        --self-in-block
+        --starvation
+        --keep-going -- clang++ -c buffer_overrun.cpp
+
+expected result:
+    no issue.
+
+actual result:
+    issue. The termination condition of the repeat statement is not recognized.
