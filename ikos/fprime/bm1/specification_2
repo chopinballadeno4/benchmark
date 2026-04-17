@@ -1,0 +1,15 @@
+tool:
+    ikos
+
+command:
+    /opt/homebrew/Cellar/llvm@14/14.0.6/bin/clang++ -emit-llvm -c -g no_vtable_test.cpp -o no_vtable_test.bc
+
+    ikos --proc=intra -a=boa --opt=none no_vtable_test.bc
+
+expected result:
+    no issue.
+
+actual result:
+    no issue.
+
+description:

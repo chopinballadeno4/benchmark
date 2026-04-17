@@ -1,0 +1,23 @@
+tool:
+    ikos
+
+command:
+    /opt/homebrew/Cellar/llvm@14/14.0.6/bin/clang++ -emit-llvm -c -g vtable_test.cpp -o vtable_test.bc
+
+    ikos --proc=intra -a=boa --opt=none vtable_test.bc
+
+expected result:
+    no issue.
+
+actual result:
+    error: unexpected llvm constant expression
+    ikos: error: a run-time error occurred
+
+description:
+    ; 컴파일 후 IR에서 이런 패턴이 생김
+      @_ZTV4Base = constant { [4 x i8*] } { [4 x i8*] [
+        i8* null,
+        i8* bitcast ({ i8*, i8*, i8* }* @_ZTI4Base to i8*),  ← 문제
+        i8* bitcast (int (Base*, int)* @_ZN4Base7computeEi to i8*),  ← 문제
+        i8* bitcast (void (Base*)* @_ZN4BaseD1Ev to i8*)  ← 문제
+      ]}
