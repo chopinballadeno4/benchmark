@@ -1,4 +1,4 @@
-#include "../../../bm1/fw_assert.hpp"
+#include "./fw_assert.hpp"
 
 unsigned int getIndex();
 int* getBuffer();
