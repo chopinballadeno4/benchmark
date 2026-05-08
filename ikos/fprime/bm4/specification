@@ -1,0 +1,11 @@
+tool:
+    ikos
+
+command:
+    ikos -a="*" minimal_overflow_check.cpp
+
+expected result:
+    no issue.
+
+actual result:
+    issue. warning: possible buffer overflow, pointer '&table[(uint64_t)entry].port' accesses 4 bytes at offset between 8 and 1808 bytes of global variable 'table' of size 1800 bytes
