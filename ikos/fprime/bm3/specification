@@ -1,0 +1,12 @@
+tool:
+    ikos
+
+command:
+    ikos -a="*" buffer_overrun.cpp
+
+expected result:
+    no issue.
+
+actual result:
+    issue. warning: possible buffer overflow, accessing index between 0 and 15 of constant "INVALID_ADDR" of 13 elements
+        if (source[length] == '\0') break;  // IKOS: index [0, buffer_size-1] on 13-byte buffer
