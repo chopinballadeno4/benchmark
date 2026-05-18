@@ -2,11 +2,25 @@ tool:
     ikos
 
 command:
-    ikos -a='*' fw_assert_micro.cpp
+    ikos -a='*' infer_constraint_propagation.cpp
 
 expected result:
     no issue.
 
 actual result:
-    warning: pointer 'ptr' might be null
-    warning: possible buffer overflow, accessing index between 0 and 19 of local variable 'arr' of 10 elements
+    test_guard():
+        warning: pointer 'ptr' might be null
+        warning: memory access might be invalid, could not infer information about pointer 'ptr'
+        warning: ignored memory write, could not infer information about pointer 'ptr'. Analysis might be unsound.
+
+note:
+    guard_check() 구현이 동일 파일에 있어 abort() 호출을 직접 볼 수 있음.
+
+    test_direct(): if (ptr == nullptr) abort() — intra-procedural
+        → IKOS 가 함수 내부에서 forward 전파 성공 → "pointer might be null" 경고 없음.
+
+    test_guard(): guard_check(ptr != nullptr) — inter-procedural
+        → IKOS 가 guard_check() 가 반환됐다는 사실로부터 ptr != nullptr 임을 추론하지 못함.
+        → false positive 발생.
+
+    결론: IKOS 는 함수가 리턴됐다면 어떤 조건이 만족됐는지를 추론하지 못한다.

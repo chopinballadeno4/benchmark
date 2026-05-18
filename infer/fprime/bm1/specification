@@ -2,24 +2,25 @@ tool:
     infer
 
 command:
-    infer run
-        --biabduction
-        --bufferoverrun
-        --cost
-        --liveness
-        --loop-hoisting
-        --parameter-not-null-checked
-        --pulse
-        --quandary
-        --racerd
-        --siof
-        --self-in-block
-        --starvation
-        --keep-going
-        -- clang++ -c fw_assert.cpp
+    infer run --biabduction --bufferoverrun --cost --liveness --loop-hoisting --parameter-not-null-checked --pulse --quandary --racerd --siof --self-in-block --starvation --keep-going -- clang++ -c infer_constraint_propagation.cpp
 
 expected result:
     no issue.
 
 actual result:
-    issue. infer is not aware of FW_ASSERT.
+    test_inter():
+        Null Dereference (NULLPTR_DEREFERENCE)
+        `ptr` could be null and is dereferenced at line 18.
+
+note:
+    guard_check() 구현이 동일 파일에 있어 abort() 호출을 직접 볼 수 있음.
+
+    test_intra(): if (ptr == nullptr) abort() — intra-procedural
+        → Infer 가 함수 내부에서 제약 전파 성공.
+
+    test_inter(): guard_check(ptr != nullptr) — inter-procedural
+        → Infer 가 guard_check() 가 반환됐다는 사실로부터 ptr != nullptr 임을 추론하지 못함.
+        → false positive 발생.
+
+    결론: Infer 도 명시적 null(nullptr) 에서는 IKOS 와 동일하게
+          "함수가 리턴됐다면 조건이 만족됐다"를 추론하지 못한다.
