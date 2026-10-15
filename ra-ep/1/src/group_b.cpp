@@ -1,11 +1,6 @@
 #include "benchmark.h"
 
-// GROUP B — FW_ASSERT constraint propagation: IKOS warns despite assert
-//
-// Each function asserts a relation between two or more variables.
-// The interval domain tracks variables independently, so inter-variable
-// constraints expressed by FW_ASSERT cannot be represented as box
-// constraints.  Expected result: warning remains.
+// GROUP B — IKOS reports a warning after FW_ASSERT
 
 // B1: Relational unsigned subtraction
 //   Models: Buffer::advance() — FW_ASSERT(amount <= m_size) → m_size -= amount
@@ -14,18 +9,9 @@ unsigned b1_relational_sub(unsigned amount, unsigned m_size) {
     return m_size - amount;
 }
 
-// B2: Pointer non-overlap assertion
-//   Models: StringUtils::string_copy()
-//           FW_ASSERT((dest+dest_size <= src) || (src+src_size <= dest))
-void b2_ptr_overlap(char* d, unsigned ds, const char* s, unsigned ss) {
-    FW_ASSERT((d + ds <= s) || (s + ss <= d));
-    d[0] = s[0];
-}
-
-// B3: Two-variable sum-bound check
-//   Models: Buffer bounds check — FW_ASSERT(offset + size <= capacity)
-void b3_sum_bound(char* base, unsigned offset, unsigned size, unsigned capacity) {
-    FW_ASSERT(offset + size <= capacity);
-    char* end = base + offset + size;
-    (void)end;
+// B2: Insufficient lower bound
+//   FW_ASSERT(a >= 5) permits a == 5, so a - 6 can underflow.
+unsigned b2_boundary_underflow(unsigned a) {
+    FW_ASSERT(a >= 5u);
+    return a - 6u;
 }
