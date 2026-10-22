@@ -15,3 +15,12 @@ unsigned b2_boundary_underflow(unsigned a) {
     FW_ASSERT(a >= 5u);
     return a - 6u;
 }
+
+// B3: Pointer nullity after FW_ASSERT
+//   Models: FW_ASSERT(buffAddr != nullptr) followed by buffer stores.
+//   The harness deliberately passes either a valid two-byte buffer or nullptr.
+void b3_asserted_pointer_store(unsigned char* buffAddr) {
+    FW_ASSERT(buffAddr != nullptr);
+    buffAddr[0] = 42u;
+    buffAddr[1] = 0u;
+}

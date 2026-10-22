@@ -17,5 +17,6 @@ unsigned a3_range_arith(unsigned x);
 // Includes both a relational-domain precision loss and a real boundary error.
 unsigned b1_relational_sub(unsigned amount, unsigned m_size);
 unsigned b2_boundary_underflow(unsigned a);
+void     b3_asserted_pointer_store(unsigned char* buffAddr);
 
 #endif /* BENCHMARK_H */

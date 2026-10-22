@@ -25,5 +25,10 @@ int main(int argc, char** argv) {
     // B2: a >= 5이지만 a - 6은 a=5에서 underflow → WARNING
     (void)b2_boundary_underflow(ua);
 
+    // B3: nullable 포인터가 FW_ASSERT 이후 NonNull로 좁혀지는지 확인
+    unsigned char storage[2] = {0u, 0u};
+    unsigned char* maybe_buffer = ((ua % 2u) == 0u) ? storage : nullptr;
+    b3_asserted_pointer_store(maybe_buffer);
+
     return 0;
 }
